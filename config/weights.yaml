@@ -1,0 +1,5 @@
+base_severity: 1.0
+host_criticality: 1.0
+user_privilege: 1.0
+behavioral_frequency: 1.0
+correlation_bonus: 15.0

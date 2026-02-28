@@ -1,0 +1,14 @@
+# Secrets — never commit these
+.env
+
+# Virtual environment
+/.venv/
+
+# Python cache
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Splunk config contains connection details; credentials must NOT be stored here,
+# but the file itself is excluded as an extra safety net.
+config/splunk.yaml

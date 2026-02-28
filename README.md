@@ -1,0 +1,263 @@
+# InsightOps — AI-Assisted SOC Intelligence Engine
+
+InsightOps is a **SOC-assist (not SOC-automation)** intelligence engine that correlates security alerts, assigns deterministic risk scores, maps MITRE ATT&CK techniques, and generates analyst-ready incident narratives — all without ML, black boxes, or automated response.
+
+---
+
+## 🎯 Design Philosophy
+
+- **Deterministic scoring only** — every score is reproducible and auditable
+- **SOC-assist, not SOAR** — analysts decide; InsightOps informs
+- **Fail-safe by design** — engine errors never crash the SIEM pipeline
+- **Explainability first** — every incident includes a plain-English summary
+- **Layer separation** — dashboards never mutate state; logic never lives in UI
+
+---
+
+## 🏗️ Architecture
+
+```
+Splunk (index=main)
+    │
+    ▼  REST API :8089
+┌───────────────────────────────────────────────────┐
+│  ai-engine/main.py                                │
+│                                                   │
+│  0. run_signal_health_check()                     │
+│  1. fetch_alerts()         ← splunk_client.py     │
+│  2. calculate_risk_score() ← risk_scorer.py       │
+│  3. correlate_incidents()  ← incident_builder.py  │
+│  4. apply_correlation_bonuses() ← bonus_engine.py │
+│  5. explain_incident()     ← explainer.py         │
+│  6. write_incident_to_hec()← hec_writer.py        │
+└───────────────────────────────────────────────────┘
+    │
+    ▼  HEC :8088
+Splunk (index=ai_soc)
+```
+
+---
+
+## 📁 Project Structure
+
+```
+InsightOps/
+├── ai-engine/
+│   ├── main.py                       Pipeline orchestrator (~155 lines)
+│   ├── correlation/
+│   │   ├── bonus_engine.py           Attack chain bonuses + weight loading
+│   │   └── incident_builder.py       Alert → incident grouping
+│   ├── explainability/
+│   │   └── explainer.py              MITRE mapping, summaries, investigation steps
+│   ├── health/
+│   │   └── signal_health.py          Telemetry freshness check (pre-pipeline)
+│   ├── ingestion/
+│   │   ├── splunk_client.py          Alert fetch + classification
+│   │   └── hec_writer.py            Write enriched incidents to Splunk HEC
+│   └── scoring/
+│       └── risk_scorer.py            4-factor weighted risk scoring
+├── tests/                            77 unit tests (pytest), no Splunk required
+├── config/
+│   ├── splunk.yaml                   Connection details (no credentials)
+│   └── weights.yaml                  Static scoring weights
+├── docs/
+│   ├── Lessons_Learned.md            15 lessons from building this project
+│   └── DASHBOARDS.md                 Splunk dashboard XML definitions
+├── .env.example                      Credential template
+├── .gitignore
+├── pytest.ini
+└── requirements.txt
+```
+
+---
+
+## ⚙️ Setup
+
+### 1. Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 2. Configure credentials
+
+```bash
+cp .env.example .env
+# Edit .env and fill in your real values:
+#   export SPLUNK_USERNAME=...
+#   export SPLUNK_PASSWORD=...
+#   export SPLUNK_HEC_TOKEN=...
+source .env
+```
+
+### 3. Configure connection
+
+Edit `config/splunk.yaml`:
+```yaml
+splunk_host: 10.10.10.1
+management_port: 8089
+hec_port: 8088
+ai_soc_index: ai_soc
+```
+
+---
+
+## 🚀 Running
+
+```bash
+# Dry-run (no writes to Splunk)
+source .env
+python ai-engine/main.py --dry-run
+
+# Full pipeline (writes enriched incidents to Splunk HEC)
+python ai-engine/main.py
+```
+
+**Expected output (dry-run):**
+```
+INFO  Dry run enabled: no data will be sent to Splunk
+--- Signal Health Check ---
+[OK] linux_secure: last event 2 minutes ago
+⚠️  wineventlog:security: no events in last 12 minutes
+[OK] alert:InsightOps*: last event 1 minute ago
+---------------------------
+INFO  Fetching alerts from Splunk
+INFO  Scored 4 alerts
+INFO  Correlated 2 incidents
+INFO  Wrote incident af3c… to Splunk HEC
+```
+
+---
+
+## 🔍 Detection Coverage
+
+| Alert | Platform | MITRE | Severity |
+|---|---|---|---|
+| Password Spraying | Windows / Linux | T1110.003 | HIGH |
+| SSH Brute Force | Linux | T1110.001 | LOW |
+| Kerberoasting | Windows | T1558.003 | CRITICAL |
+| Lateral Movement | Windows | T1021 | HIGH |
+| Lateral Movement (SSH) | Linux | T1021.004 | HIGH |
+| Privilege Escalation | Windows | T1068 | CRITICAL |
+| Privilege Escalation (sudo/SUID) | Linux | T1548.003 | CRITICAL |
+| Persistence | Windows | T1547 | CRITICAL |
+| Persistence (cron) | Linux | T1053.003 | CRITICAL |
+| Credential Dumping | Windows / Linux | T1003 | CRITICAL |
+| Ransomware Pre-Impact | Windows / Linux | T1490 | CRITICAL |
+
+---
+
+## 📊 Risk Scoring
+
+```
+risk_score = normalize(
+    severity       × w_base_severity      +
+    host_criticality × w_host_criticality +
+    user_privilege × w_user_privilege     +
+    event_frequency × w_behavioral_frequency
+) + correlation_bonus   →   capped at 100
+```
+
+Weights are loaded from `config/weights.yaml`. Defaults:
+
+```yaml
+base_severity: 1.0
+host_criticality: 1.0
+user_privilege: 1.0
+behavioral_frequency: 1.0
+correlation_bonus: 15.0
+```
+
+### Correlation Bonus Stacking
+
+| Chain | Bonus |
+|---|---|
+| Any Password Spraying | +0.5× bonus |
+| PS → Kerberoasting | +1× bonus |
+| Cred Access → Privilege Escalation | +1× bonus |
+| Priv-Esc → Persistence | +1× bonus |
+| Any Lateral Movement (Linux) | +1× bonus (amplified if cred access present) |
+| Any Credential Dumping | +1× bonus |
+| Pre-Ransomware after PE/Persistence/LM | +100 (capped to 100) |
+
+---
+
+## 🧠 Explainability Output
+
+Every incident written to Splunk includes:
+
+```json
+{
+  "incident_id": "af3c89d1-...",
+  "risk_score": 87.5,
+  "plain_english_summary": "A 3-alert chain on dc01...",
+  "mitre_techniques": [
+    {"technique_id": "T1110.003", "technique_name": "Brute Force: Password Spraying"},
+    {"technique_id": "T1558.003", "technique_name": "Steal or Forge Kerberos Tickets"}
+  ],
+  "risk_score_explanation": "Score elevated by correlation bonus of 30.0...",
+  "investigation_steps": [
+    "Review failed authentication events for dc01...",
+    "Check for suspicious Kerberos ticket requests..."
+  ]
+}
+```
+
+---
+
+## 🩺 Signal Health Check
+
+Runs before every pipeline execution. Queries Splunk for latest event time across:
+
+| Signal | Filter |
+|---|---|
+| `linux_secure` | `sourcetype=linux_secure` |
+| `wineventlog:security` | `sourcetype=wineventlog:security` |
+| `alert:InsightOps*` | `source="alert:InsightOps*"` |
+
+Warns if any signal has no events in the last 10 minutes. Uses a 15s timeout per query. Fully fail-safe — never blocks the pipeline.
+
+---
+
+## 🧪 Tests
+
+```bash
+pytest tests/ -v
+```
+
+```
+77 passed in 0.17s
+```
+
+No Splunk connection required. Tests cover:
+- `test_risk_scorer.py` — scoring formula, caps, breakdown keys
+- `test_bonus_engine.py` — all bonus rules, stacking, ransomware cap
+- `test_incident_builder.py` — grouping, time windows, schema
+- `test_explainer.py` — MITRE classification correctness, investigation steps
+- `test_splunk_client.py` — all 14 alert classifiers, user field extraction
+
+---
+
+## 🔐 What InsightOps Does NOT Do
+
+| Capability | Status |
+|---|---|
+| Automated response / blocking | ❌ Never |
+| ML or probabilistic scoring | ❌ Never |
+| UI-driven state mutation | ❌ Never |
+| Analyst feedback loop | ❌ Removed (v1) |
+| SOAR actions | ❌ Never |
+
+---
+
+## 🎓 Academic Context
+
+Built as a **6th-semester B.Tech (CSE – Cybersecurity)** Portfolio project. Demonstrates real SIEM integration, Windows + Linux kill-chain coverage, and production-grade SOC engineering practices well beyond typical academic scope.
+
+---
+
+## Final Note
+
+InsightOps is not a tool that "detects attacks."
+
+It is a system that **protects analyst decision integrity**.
