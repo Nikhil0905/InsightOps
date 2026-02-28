@@ -1,16 +1,102 @@
-# InsightOps — AI-Assisted SOC Intelligence Engine
+# InsightOps – AI-Driven SOC Intelligence
 
-InsightOps is a **SOC-assist (not SOC-automation)** intelligence engine that correlates security alerts, assigns deterministic risk scores, maps MITRE ATT&CK techniques, and generates analyst-ready incident narratives — all without ML, black boxes, or automated response.
+```
+ ___           _       _     ___            
+|_ _|_ __  ___(_) __ _| |__ / _ \ _ __  ___ 
+ | || '_ \/ __| |/ _` | '_ \ | | | '_ \/ __|
+ | || | | \__ \ | (_| | | | | |_| | |_) \__ \
+|___|_| |_|___/_|\__, |_| |_|\___/| .__/|___/
+                  |___/             |_|      
+```
+
+**InsightOps is a **SOC-assist (not SOC-automation)** intelligence engine that correlates security alerts, assigns deterministic risk scores, maps MITRE ATT&CK techniques, and generates analyst-ready incident narratives — all without ML, black boxes, or automated response.**
 
 ---
 
-## 🎯 Design Philosophy
+## 📌 Project Overview
 
-- **Deterministic scoring only** — every score is reproducible and auditable
-- **SOC-assist, not SOAR** — analysts decide; InsightOps informs
-- **Fail-safe by design** — engine errors never crash the SIEM pipeline
-- **Explainability first** — every incident includes a plain-English summary
-- **Layer separation** — dashboards never mutate state; logic never lives in UI
+**InsightOps** is an enterprise-grade **AI-assisted Security Operations Center (SOC) platform** built to reflect **real-world SOC workflows**, not academic simulations.
+
+Unlike traditional student projects that stop at log collection or isolated detections, InsightOps implements:
+
+- A realistic **Active Directory–based SOC lab**
+- **Centralized SIEM monitoring using Splunk**
+- **Detection engineering aligned with MITRE ATT&CK**
+- An external **AI-driven intelligence layer** for alert prioritization and correlation
+
+The platform is intentionally **SOC-assist only** — it augments analysts, it does not automate response.
+
+---
+
+## 🎯 Target Roles
+
+This project is designed to demonstrate readiness for:
+
+- SOC Analyst (Tier 1 / Tier 2)
+- Blue Team Engineer
+- Detection Engineer (Junior)
+- SIEM / SOC Automation Engineer
+- Entry-level DFIR roles
+
+---
+
+## 🧱 System Architecture (High-Level)
+
+InsightOps follows a **three-layer SOC architecture**:
+
+### 🔹 Layer 1 — SOC Infrastructure & Telemetry Foundation
+- Fedora Linux host running **Splunk Enterprise (bare metal)**
+- KVM/QEMU–based virtualized lab
+- Active Directory (Windows Server 2019, Domain Functional Level 2016)
+- Windows 10 and Ubuntu domain-joined endpoints
+- Kali Linux internal attacker (non-domain)
+- Centralized log collection via Splunk Universal Forwarder
+
+### 🔹 Layer 2 — AI-Driven SOC Intelligence Engine (Core Contribution)
+- External Python-based AI engine
+- Pulls alerts from Splunk via REST API
+- Performs:
+  - Contextual risk scoring (0–100)
+  - Multi-stage attack correlation
+  - Incident construction
+  - Explainable intelligence generation
+- Writes enriched incidents back to Splunk using HEC (`ai_soc` index)
+
+---
+
+## 📸 Execution & Detection Gallery
+
+InsightOps in action during live attack simulations (Kali Linux + Splunk side-by-side).
+
+### 1. Multi-Stage Attack Correlation (Incident Triage Queue)
+The triage queue showing AI-correlated incidents. Notice the deterministic risk capping at 100 (CRITICAL) for multi-stage chains involving lateral movement and credential dumping.
+![Incident Triage Queue](docs/Images_Proof/Screenshot_20260228_223232.png)
+
+### 2. Live Simulation: Kerberoasting Attack vs SOC Overview
+Attacker executing `GetUserSPNs.py` against the AD environment while the AI engine aggregates alerts and updates the SOC situational awareness overview.
+![Kerberoasting Execution](docs/Images_Proof/Screenshot_20260227_043645.png)
+
+### 3. Live Simulation: SSH Password Spraying vs SOC Overview
+Attacker spraying SSH credentials against the Linux Ubuntu host. The AI engine maps the behavior directly to MITRE T1110.003 and escalates risk.
+![SSH Spraying Execution](docs/Images_Proof/Screenshot_20260228_223222.png)
+
+---
+
+## 🌐 Lab Network Design
+
+| Component | Network |
+|--------|--------|
+| Internal SOC / AD LAN | `10.10.10.0/24` |
+| NAT / Internet | `192.168.122.0/24` |
+
+### Key Systems
+- **Fedora Host / Splunk** → `10.10.10.1`
+- **DC01 (Windows Server 2019)** → `10.10.10.10`
+- **Windows 10 Client** → `10.10.10.30`
+- **Ubuntu (AI Engine Host)** → `10.10.10.20`
+- **Kali (Attacker)** → `10.10.10.50`
+
+Dual-NIC architecture enables realistic east–west traffic monitoring and internal attack simulation.
 
 ---
 
