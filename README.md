@@ -146,6 +146,9 @@ InsightOps/
 ├── config/
 │   ├── splunk.yaml                   Connection details (no credentials)
 │   └── weights.yaml                  Static scoring weights
+├── splunk/
+│   └── detections/
+│       └── savedsearches.conf        Raw SPL for all 14 detection rules
 ├── docs/
 │   ├── Lessons_Learned.md            15 lessons from building this project
 │   └── DASHBOARDS.md                 Splunk dashboard XML definitions
@@ -230,6 +233,9 @@ INFO  Wrote incident af3c… to Splunk HEC
 | Persistence (cron) | Linux | T1053.003 | CRITICAL |
 | Credential Dumping | Windows / Linux | T1003 | CRITICAL |
 | Ransomware Pre-Impact | Windows / Linux | T1490 | CRITICAL |
+
+> [!NOTE] 
+> The raw Splunk SPL (Search Processing Language) logic behind these alerts is stored in [`splunk/detections/savedsearches.conf`](splunk/detections/savedsearches.conf).
 
 ---
 
