@@ -15,16 +15,26 @@
 
 ## 📌 Project Overview
 
-**InsightOps** is an enterprise-grade **AI-assisted Security Operations Center (SOC) platform** built to reflect **real-world SOC workflows**, not academic simulations.
+**InsightOps** is an enterprise-grade, **AI-assisted Security Operations Center (SOC) intelligence platform** designed to mirror **real-world SOC workflows**, not academic simulations.
 
-Unlike traditional student projects that stop at log collection or isolated detections, InsightOps implements:
+Unlike typical student projects that stop at log ingestion or isolated detections, InsightOps implements a full SOC-style detection-to-incident pipeline, including:
 
-- A realistic **Active Directory–based SOC lab**
-- **Centralized SIEM monitoring using Splunk**
-- **Detection engineering aligned with MITRE ATT&CK**
-- An external **AI-driven intelligence layer** for alert prioritization and correlation
+- A realistic **Active Directory–based SOC lab** (Windows + Linux)
+- **Centralized SIEM monitoring** using Splunk as the detection backbone
+- **Detection engineering aligned with MITRE ATT&CK**, not signature-based alerts
+- An external **AI-driven intelligence layer** that correlates alerts, assigns deterministic risk scores, and generates analyst-readable incident context
 
-The platform is intentionally **SOC-assist only** — it augments analysts, it does not automate response.
+InsightOps is **intentionally SOC-assist only**.
+It augments human analysts by prioritizing, correlating, and explaining security signals — it does not perform automated response or remediation, avoiding the operational risks of premature automation.
+
+To support analyst workflows, InsightOps also includes **Splunk dashboards** that provide:
+
+- A **real-time incident triage queue** for Tier-1 / Tier-2 analysts
+- A SOC-wide **incident overview** showing risk distribution and active MITRE techniques
+
+These dashboards are visualization-only and do not mutate system state, preserving **auditability and decision integrity**.
+
+InsightOps focuses on **operational correctness, explainability, and SOC maturity** rather than feature count or automation hype.
 
 ---
 
@@ -71,6 +81,7 @@ InsightOps in action during live attack simulations (Kali Linux + Splunk side-by
 ### 1. Multi-Stage Attack Correlation (Incident Triage Queue)
 The triage queue showing AI-correlated incidents. Notice the deterministic risk capping at 100 (CRITICAL) for multi-stage chains involving lateral movement and credential dumping.
 ![Incident Triage Queue](docs/Images_Proof/Screenshot_20260228_223232.png)
+![Incident Triage Queue](docs/Images_Proof/Screenshot_20260228_223222.png)
 
 ### 2. Live Simulation: Kerberoasting Attack vs SOC Overview
 Attacker executing `GetUserSPNs.py` against the AD environment while the AI engine aggregates alerts and updates the SOC situational awareness overview.
@@ -78,7 +89,7 @@ Attacker executing `GetUserSPNs.py` against the AD environment while the AI engi
 
 ### 3. Live Simulation: SSH Password Spraying vs SOC Overview
 Attacker spraying SSH credentials against the Linux Ubuntu host. The AI engine maps the behavior directly to MITRE T1110.003 and escalates risk.
-![SSH Spraying Execution](docs/Images_Proof/Screenshot_20260228_223222.png)
+![SSH Spraying Execution](docs/Images_Proof/Screenshot_20260228_210806.png)
 
 ---
 
