@@ -101,10 +101,10 @@ Attacker spraying SSH credentials against the Linux Ubuntu host. The AI engine m
 | NAT / Internet | `192.168.122.0/24` |
 
 ### Key Systems
-- **Fedora Host / Splunk** → `10.10.10.1`
+- **Fedora Host / Splunk and  (AI Engine Host)** → `10.10.10.1`
 - **DC01 (Windows Server 2019)** → `10.10.10.10`
 - **Windows 10 Client** → `10.10.10.30`
-- **Ubuntu (AI Engine Host)** → `10.10.10.20`
+- **Ubuntu Client** → `10.10.10.20`
 - **Kali (Attacker)** → `10.10.10.50`
 
 Dual-NIC architecture enables realistic east–west traffic monitoring and internal attack simulation.
