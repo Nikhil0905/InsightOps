@@ -341,18 +341,6 @@ No Splunk connection required. Tests cover:
 
 ---
 
-## 🔐 What InsightOps Does NOT Do
-
-| Capability | Status |
-|---|---|
-| Automated response / blocking | ❌ Never |
-| ML or probabilistic scoring | ❌ Never |
-| UI-driven state mutation | ❌ Never |
-| Analyst feedback loop | ❌ Removed (v1) |
-| SOAR actions | ❌ Never |
-
----
-
 ## 🎓 Academic Context
 
 Built as a **6th-semester B.Tech (CSE – Cybersecurity)** Portfolio project. Demonstrates real SIEM integration, Windows + Linux kill-chain coverage, and production-grade SOC engineering practices well beyond typical academic scope.
