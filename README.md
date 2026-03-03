@@ -9,7 +9,7 @@
                   |___/             |_|      
 ```
 
-**InsightOps is a **SOC-assist (not SOC-automation)** intelligence engine that correlates security alerts, assigns deterministic risk scores, maps MITRE ATT&CK techniques, and generates analyst-ready incident narratives — all without ML, black boxes, or automated response.**
+**InsightOps is a **SOC-assist (not SOC-automation)** intelligence engine that correlates security alerts, assigns deterministic risk scores, maps MITRE ATT&CK techniques, and generates analyst-ready incident narratives - all without ML, black boxes, or automated response.**
 
 ---
 
