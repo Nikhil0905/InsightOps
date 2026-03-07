@@ -18,3 +18,4 @@ config/splunk.yaml
 *.pid
 flask_server.log
 web_server.log
+__pycache__/
