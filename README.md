@@ -23,6 +23,7 @@ Unlike typical student projects that stop at log ingestion or isolated detection
 - **Centralized SIEM monitoring** using Splunk as the detection backbone
 - **Detection engineering aligned with MITRE ATT&CK**, not signature-based alerts
 - An external **AI-driven intelligence layer** that correlates alerts, assigns deterministic risk scores, and generates analyst-readable incident context
+- **Live Interactive Web Dashboard** for real-time demonstration, execution, and architecture visualization.
 
 InsightOps is **intentionally SOC-assist only**.
 It augments human analysts by prioritizing, correlating, and explaining security signals — it does not perform automated response or remediation, avoiding the operational risks of premature automation.
@@ -139,6 +140,11 @@ Splunk (index=ai_soc)
 
 ```
 InsightOps/
+├── web/                              Interactive Web Dashboard & UI
+│   ├── index.html                    Main landing page & live terminal
+│   ├── style.css                     Layout, typography & neon styling
+│   ├── script.js                     SSE-powered terminal simulator
+│   └── server.py                     Flask backend to stream live pipeline execution
 ├── ai-engine/
 │   ├── main.py                       Pipeline orchestrator (~155 lines)
 │   ├── correlation/
@@ -177,6 +183,7 @@ InsightOps/
 
 ```bash
 pip install -r requirements.txt
+pip install flask  # For the interactive web dashboard
 ```
 
 ### 2. Configure credentials
@@ -203,6 +210,18 @@ ai_soc_index: ai_soc
 ---
 
 ## 🚀 Running
+
+### Interactive Web Dashboard (Recommended)
+
+InsightOps features a live, responsive web dashboard that visualizes the architecture, features, and connects to the backend engine for live executions.
+
+```bash
+cd InsightOps
+python web/server.py
+```
+Then navigate to `http://localhost:5000` in your browser. From the UI, you can interactively run the pipeline, trigger dry-runs, and run the test suite while watching real-time output stream directly to the integrated terminal.
+
+### CLI Execution
 
 ```bash
 # Dry-run (no writes to Splunk)
