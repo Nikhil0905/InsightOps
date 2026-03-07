@@ -267,6 +267,8 @@ function runPipeline(mode) {
     const title = document.getElementById('terminalTitle');
     if (title) title.textContent = mode === 'dry-run' ? 'insightops — dry-run' : 'insightops — full pipeline';
 
+    highlightPipelineStep(-1);
+
     const cmd = mode === 'dry-run'
         ? '$ python ai-engine/main.py --dry-run'
         : '$ python ai-engine/main.py';
@@ -307,6 +309,14 @@ function runPipeline(mode) {
                 else if (data.line.startsWith('WARNING')) cls = 't-yellow';
                 else if (data.line.startsWith('ERROR')) cls = 't-red';
                 else cls = 'line-stderr';
+
+                // Pipeline highlighting hooks
+                if (data.line.includes('Signal Health Check') || data.line.includes('Pinging telemetry')) highlightPipelineStep(0);
+                else if (data.line.includes('Fetching alerts')) highlightPipelineStep(1);
+                else if (data.line.includes('Scored')) highlightPipelineStep(2);
+                else if (data.line.includes('Correlating') || data.line.includes('Correlated')) highlightPipelineStep(3);
+                else if (data.line.includes('incident ')) highlightPipelineStep(4);
+                else if (data.line.includes('Wrote incident') || data.line.includes('[DRY-RUN] Would write')) highlightPipelineStep(5);
             } else {
                 // stdout — JSON output from dry-run
                 if (data.line.startsWith('{') || data.line.startsWith('}') || data.line.startsWith('  "')) {
@@ -413,8 +423,52 @@ function clearTerminal() {
     const title = document.getElementById('terminalTitle');
     if (title) title.textContent = 'insightops';
 
+    highlightPipelineStep(-1);
+
     setTerminalStatus('idle', _backendAvailable ? 'Ready' : 'Idle');
     setButtonsDisabled(false);
+}
+
+function downloadTerminalLogs() {
+    const output = document.getElementById('terminalOutput');
+    if (!output || !output.innerText.trim()) {
+        alert('Terminal is empty. No logs to download.');
+        return;
+    }
+
+    const text = output.innerText;
+    const blob = new Blob([text], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `insightops_log_${new Date().toISOString().replace(/[:.]/g, '-')}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+function highlightPipelineStep(targetIndex) {
+    for (let i = 0; i <= 5; i++) {
+        const step = document.getElementById(`pipe-step-${i}`);
+        const arrow = document.getElementById(`pipe-arrow-${i}`);
+
+        if (step) {
+            if (i <= targetIndex) {
+                step.classList.add('active');
+            } else {
+                step.classList.remove('active');
+            }
+        }
+
+        if (arrow) {
+            if (i < targetIndex) {
+                arrow.classList.add('active');
+            } else {
+                arrow.classList.remove('active');
+            }
+        }
+    }
 }
 
 /* --- Detection Cards --- */

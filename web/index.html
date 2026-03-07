@@ -111,6 +111,9 @@
                 <button class="run-btn run-tests" id="btnRunTests" onclick="runTests()">
                     <span class="run-icon">🧪</span> Run Tests
                 </button>
+                <button class="run-btn run-download" id="btnDownloadLog" onclick="downloadTerminalLogs()">
+                    <span class="run-icon">📥</span> Download Log
+                </button>
                 <button class="run-btn run-clear" id="btnClear" onclick="clearTerminal()">
                     <span class="run-icon">✕</span> Clear
                 </button>
@@ -250,37 +253,37 @@
                         <span class="arch-badge">Core</span>
                     </div>
                     <div class="arch-pipeline">
-                        <div class="pipeline-step">
+                        <div class="pipeline-step" id="pipe-step-0">
                             <span class="step-num">0</span>
                             <span class="step-name">Health Check</span>
                             <span class="step-file">signal_health.py</span>
                         </div>
-                        <div class="pipeline-arrow">→</div>
-                        <div class="pipeline-step">
+                        <div class="pipeline-arrow" id="pipe-arrow-0">→</div>
+                        <div class="pipeline-step" id="pipe-step-1">
                             <span class="step-num">1</span>
                             <span class="step-name">Fetch Alerts</span>
                             <span class="step-file">splunk_client.py</span>
                         </div>
-                        <div class="pipeline-arrow">→</div>
-                        <div class="pipeline-step">
+                        <div class="pipeline-arrow" id="pipe-arrow-1">→</div>
+                        <div class="pipeline-step" id="pipe-step-2">
                             <span class="step-num">2</span>
                             <span class="step-name">Risk Score</span>
                             <span class="step-file">risk_scorer.py</span>
                         </div>
-                        <div class="pipeline-arrow">→</div>
-                        <div class="pipeline-step">
+                        <div class="pipeline-arrow" id="pipe-arrow-2">→</div>
+                        <div class="pipeline-step" id="pipe-step-3">
                             <span class="step-num">3</span>
                             <span class="step-name">Correlate</span>
                             <span class="step-file">incident_builder.py</span>
                         </div>
-                        <div class="pipeline-arrow">→</div>
-                        <div class="pipeline-step">
+                        <div class="pipeline-arrow" id="pipe-arrow-3">→</div>
+                        <div class="pipeline-step" id="pipe-step-4">
                             <span class="step-num">4</span>
                             <span class="step-name">Bonus Engine</span>
                             <span class="step-file">bonus_engine.py</span>
                         </div>
-                        <div class="pipeline-arrow">→</div>
-                        <div class="pipeline-step">
+                        <div class="pipeline-arrow" id="pipe-arrow-4">→</div>
+                        <div class="pipeline-step" id="pipe-step-5">
                             <span class="step-num">5</span>
                             <span class="step-name">Explain</span>
                             <span class="step-file">explainer.py</span>

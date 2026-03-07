@@ -1,203 +1,120 @@
-# InsightOps – AI-Driven SOC Intelligence
+<div align="center">
 
-```
- ___           _       _     ___            
-|_ _|_ __  ___(_) __ _| |__ / _ \ _ __  ___ 
- | || '_ \/ __| |/ _` | '_ \ | | | '_ \/ __|
- | || | | \__ \ | (_| | | | | |_| | |_) \__ \
-|___|_| |_|___/_|\__, |_| |_|\___/| .__/|___/
-                  |___/             |_|      
-```
+# ⚡ InsightOps
 
-**InsightOps is a **SOC-assist (not SOC-automation)** intelligence engine that correlates security alerts, assigns deterministic risk scores, maps MITRE ATT&CK techniques, and generates analyst-ready incident narratives - all without ML, black boxes, or automated response.**
+### AI-Driven SOC Intelligence Engine
 
----
+[![Python](https://img.shields.io/badge/Python-3.10%2B-blue?style=flat-square&logo=python)](https://python.org)
+[![Tests](https://img.shields.io/badge/Tests-77%20passed-brightgreen?style=flat-square&logo=pytest)](tests/)
+[![Flask](https://img.shields.io/badge/Flask-3.1-lightgrey?style=flat-square&logo=flask)](web/server.py)
+[![MITRE ATT&CK](https://img.shields.io/badge/MITRE%20ATT%26CK-11%20Techniques-red?style=flat-square)](https://attack.mitre.org)
+[![License](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)](LICENSE)
 
-## 📌 Project Overview
+**InsightOps correlates security alerts, assigns deterministic risk scores, maps MITRE ATT&CK techniques, and generates analyst-ready incident narratives — without ML, black boxes, or automated response.**
 
-**InsightOps** is an enterprise-grade, **AI-assisted Security Operations Center (SOC) intelligence platform** designed to mirror **real-world SOC workflows**, not academic simulations.
+[🌐 Live Dashboard](#-interactive-web-dashboard) · [🚀 Quick Start](#-quick-start) · [🏗️ Architecture](#%EF%B8%8F-architecture) · [📖 Documentation](#-project-structure)
 
-Unlike typical student projects that stop at log ingestion or isolated detections, InsightOps implements a full SOC-style detection-to-incident pipeline, including:
-
-- A realistic **Active Directory–based SOC lab** (Windows + Linux)
-- **Centralized SIEM monitoring** using Splunk as the detection backbone
-- **Detection engineering aligned with MITRE ATT&CK**, not signature-based alerts
-- An external **AI-driven intelligence layer** that correlates alerts, assigns deterministic risk scores, and generates analyst-readable incident context
-- **Live Interactive Web Dashboard** for real-time demonstration, execution, and architecture visualization.
-
-InsightOps is **intentionally SOC-assist only**.
-It augments human analysts by prioritizing, correlating, and explaining security signals — it does not perform automated response or remediation, avoiding the operational risks of premature automation.
-
-To support analyst workflows, InsightOps also includes **Splunk dashboards** that provide:
-
-- A **real-time incident triage queue** for Tier-1 / Tier-2 analysts
-- A SOC-wide **incident overview** showing risk distribution and active MITRE techniques
-
-These dashboards are visualization-only and do not mutate system state, preserving **auditability and decision integrity**.
-
-InsightOps focuses on **operational correctness, explainability, and SOC maturity** rather than feature count or automation hype.
+</div>
 
 ---
 
-## 🎯 Target Roles
+## 🎯 What Is InsightOps?
 
-This project is designed to demonstrate readiness for:
+InsightOps is an **enterprise-grade, SOC-assist intelligence platform** built to mirror real-world Security Operations Center workflows — not academic simulations.
 
-- SOC Analyst (Tier 1 / Tier 2)
-- Blue Team Engineer
-- Detection Engineer (Junior)
-- SIEM / SOC Automation Engineer
-- Entry-level DFIR roles
+Most student projects stop at log ingestion or isolated detections. InsightOps implements a **full detection-to-incident pipeline**:
 
----
+| Capability | Description |
+|---|---|
+| 🔍 **Detection Engineering** | 11 MITRE ATT&CK–aligned alerts (SPL) covering Windows + Linux |
+| 🧠 **AI Intelligence Engine** | Deterministic risk scoring, multi-stage correlation, explainability |
+| 📊 **Splunk Integration** | Pulls alerts via REST API, writes enriched incidents back via HEC |
+| 🩺 **Signal Health Check** | Pre-pipeline telemetry freshness verification |
+| 🌐 **Live Web Dashboard** | SSE-powered terminal, architecture visualizer, pipeline execution |
+| 🧪 **77 Unit Tests** | Full coverage — no Splunk connection required |
 
-## 🧱 System Architecture (High-Level)
-
-InsightOps follows a **three-layer SOC architecture**:
-
-### 🔹 Layer 1 — SOC Infrastructure & Telemetry Foundation
-- Fedora Linux host running **Splunk Enterprise (bare metal)**
-- KVM/QEMU–based virtualized lab
-- Active Directory (Windows Server 2019, Domain Functional Level 2016)
-- Windows 10 and Ubuntu domain-joined endpoints
-- Kali Linux internal attacker (non-domain)
-- Centralized log collection via Splunk Universal Forwarder
-
-### 🔹 Layer 2 — AI-Driven SOC Intelligence Engine (Core Contribution)
-- External Python-based AI engine
-- Pulls alerts from Splunk via REST API
-- Performs:
-  - Contextual risk scoring (0–100)
-  - Multi-stage attack correlation
-  - Incident construction
-  - Explainable intelligence generation
-- Writes enriched incidents back to Splunk using HEC (`ai_soc` index)
-
----
-
-## 📸 Execution & Detection Gallery
-
-InsightOps in action during live attack simulations (Kali Linux + Splunk side-by-side).
-
-### 1. Multi-Stage Attack Correlation (Incident Triage Queue)
-The triage queue showing AI-correlated incidents. Notice the deterministic risk capping at 100 (CRITICAL) for multi-stage chains involving lateral movement and credential dumping.
-![Incident Triage Queue](docs/Images_Proof/Screenshot_20260228_223232.png)
-![Incident Triage Queue](docs/Images_Proof/Screenshot_20260228_223222.png)
-
-### 2. Live Simulation: Kerberoasting Attack vs SOC Overview
-Attacker executing `GetUserSPNs.py` against the AD environment while the AI engine aggregates alerts and updates the SOC situational awareness overview.
-![Kerberoasting Execution](docs/Images_Proof/Screenshot_20260227_043645.png)
-
-### 3. Live Simulation: SSH Password Spraying vs SOC Overview
-Attacker spraying SSH credentials against the Linux Ubuntu host. The AI engine maps the behavior directly to MITRE T1110.003 and escalates risk.
-![SSH Spraying Execution](docs/Images_Proof/Screenshot_20260228_210806.png)
-
----
-
-## 🌐 Lab Network Design
-
-| Component | Network |
-|--------|--------|
-| Internal SOC / AD LAN | `10.10.10.0/24` |
-| NAT / Internet | `192.168.122.0/24` |
-
-### Key Systems
-- **Fedora Host / Splunk and  (AI Engine Host)** → `10.10.10.1`
-- **DC01 (Windows Server 2019)** → `10.10.10.10`
-- **Windows 10 Client** → `10.10.10.30`
-- **Ubuntu Client** → `10.10.10.20`
-- **Kali (Attacker)** → `10.10.10.50`
-
-Dual-NIC architecture enables realistic east–west traffic monitoring and internal attack simulation.
+> **SOC-Assist, not SOC-Automation.** InsightOps augments human analysts by prioritizing, correlating, and explaining security signals. It never performs automated response, preserving analyst decision integrity.
 
 ---
 
 ## 🏗️ Architecture
 
-```
-Splunk (index=main)
-    │
-    ▼  REST API :8089
-┌───────────────────────────────────────────────────┐
-│  ai-engine/main.py                                │
-│                                                   │
-│  0. run_signal_health_check()                     │
-│  1. fetch_alerts()         ← splunk_client.py     │
-│  2. calculate_risk_score() ← risk_scorer.py       │
-│  3. correlate_incidents()  ← incident_builder.py  │
-│  4. apply_correlation_bonuses() ← bonus_engine.py │
-│  5. explain_incident()     ← explainer.py         │
-│  6. write_incident_to_hec()← hec_writer.py        │
-└───────────────────────────────────────────────────┘
-    │
-    ▼  HEC :8088
-Splunk (index=ai_soc)
-```
-
----
-
-## 📁 Project Structure
+InsightOps follows a **three-layer SOC architecture**:
 
 ```
-InsightOps/
-├── web/                              Interactive Web Dashboard & UI
-│   ├── index.html                    Main landing page & live terminal
-│   ├── style.css                     Layout, typography & neon styling
-│   ├── script.js                     SSE-powered terminal simulator
-│   └── server.py                     Flask backend to stream live pipeline execution
-├── ai-engine/
-│   ├── main.py                       Pipeline orchestrator (~155 lines)
-│   ├── correlation/
-│   │   ├── bonus_engine.py           Attack chain bonuses + weight loading
-│   │   └── incident_builder.py       Alert → incident grouping
-│   ├── explainability/
-│   │   └── explainer.py              MITRE mapping, summaries, investigation steps
-│   ├── health/
-│   │   └── signal_health.py          Telemetry freshness check (pre-pipeline)
-│   ├── ingestion/
-│   │   ├── splunk_client.py          Alert fetch + classification
-│   │   └── hec_writer.py            Write enriched incidents to Splunk HEC
-│   └── scoring/
-│       └── risk_scorer.py            4-factor weighted risk scoring
-├── tests/                            77 unit tests (pytest), no Splunk required
-├── config/
-│   ├── splunk.yaml                   Connection details (no credentials)
-│   └── weights.yaml                  Static scoring weights
-├── splunk/
-│   └── detections/
-│       └── savedsearches.conf        Raw SPL for all 14 detection rules
-├── docs/
-│   ├── Lessons_Learned.md            15 lessons from building this project
-│   └── DASHBOARDS.md                 Splunk dashboard XML definitions
-├── .env.example                      Credential template
-├── .gitignore
-├── pytest.ini
-└── requirements.txt
+┌─────────────────────────────────────────────────┐
+│  Layer 1 — SOC Infrastructure                   │
+│  Fedora Host · DC01 (Win Server 2019) · Win10   │
+│  Ubuntu · Kali (Attacker) · Splunk Enterprise   │
+│  Centralized log collection · AD Domain         │
+└─────────────────────┬───────────────────────────┘
+                      │ REST API :8089
+┌─────────────────────▼───────────────────────────┐
+│  Layer 2 — AI Intelligence Engine (Core)        │
+│                                                 │
+│  [0] Signal Health Check  signal_health.py      │
+│  [1] Fetch Alerts    ←    splunk_client.py      │
+│  [2] Risk Scoring    ←    risk_scorer.py        │
+│  [3] Correlation     ←    incident_builder.py   │
+│  [4] Bonus Engine    ←    bonus_engine.py       │
+│  [5] Explainability  ←    explainer.py          │
+│  [6] Write to HEC    ←    hec_writer.py         │
+└─────────────────────┬───────────────────────────┘
+                      │ HEC :8088
+┌─────────────────────▼───────────────────────────┐
+│  Layer 3 — Enriched Intelligence (ai_soc index) │
+│  Analyst Triage Queue · SOC Overview Dashboard  │
+└─────────────────────────────────────────────────┘
 ```
 
 ---
 
-## ⚙️ Setup
+## 🌐 Interactive Web Dashboard
 
-### 1. Install dependencies
+InsightOps ships with a live web dashboard that connects directly to the AI engine:
+
+- **Live terminal** — stream dry-run or full pipeline output in real time via SSE
+- **Architecture visualizer** — pipeline steps light up as they execute
+- **Run Tests** — trigger the pytest suite and watch results stream in
+- **Download Log** — export the full terminal output as `.txt`
+- **Fallback simulation** — plays an animated dry-run if the Flask server isn't running
 
 ```bash
-pip install -r requirements.txt
-pip install flask  # For the interactive web dashboard
+# Install Flask (one-time)
+pip install flask
+
+# Start the server from project root
+python web/server.py
+
+# Open in browser
+open http://localhost:5000
 ```
 
-### 2. Configure credentials
+---
+
+## 🚀 Quick Start
+
+### 1. Clone & Install
+
+```bash
+git clone https://github.com/Nikhil0905/InsightOps.git
+cd InsightOps
+pip install -r requirements.txt
+pip install flask  # for the web dashboard
+```
+
+### 2. Configure Credentials
 
 ```bash
 cp .env.example .env
-# Edit .env and fill in your real values:
-#   export SPLUNK_USERNAME=...
-#   export SPLUNK_PASSWORD=...
-#   export SPLUNK_HEC_TOKEN=...
+# Fill in your values:
+#   SPLUNK_USERNAME=...
+#   SPLUNK_PASSWORD=...
+#   SPLUNK_HEC_TOKEN=...
 source .env
 ```
 
-### 3. Configure connection
+### 3. Configure Connection
 
 Edit `config/splunk.yaml`:
 ```yaml
@@ -207,32 +124,20 @@ hec_port: 8088
 ai_soc_index: ai_soc
 ```
 
----
-
-## 🚀 Running
-
-### Interactive Web Dashboard (Recommended)
-
-InsightOps features a live, responsive web dashboard that visualizes the architecture, features, and connects to the backend engine for live executions.
+### 4. Run
 
 ```bash
-cd InsightOps
-python web/server.py
-```
-Then navigate to `http://localhost:5000` in your browser. From the UI, you can interactively run the pipeline, trigger dry-runs, and run the test suite while watching real-time output stream directly to the integrated terminal.
-
-### CLI Execution
-
-```bash
-# Dry-run (no writes to Splunk)
-source .env
+# Dry-run (safe — no writes to Splunk)
 python ai-engine/main.py --dry-run
 
-# Full pipeline (writes enriched incidents to Splunk HEC)
+# Full pipeline
 python ai-engine/main.py
+
+# Run all tests (no Splunk needed)
+pytest tests/ -v
 ```
 
-**Expected output (dry-run):**
+**Expected dry-run output:**
 ```
 INFO  Dry run enabled: no data will be sent to Splunk
 --- Signal Health Check ---
@@ -242,85 +147,92 @@ INFO  Dry run enabled: no data will be sent to Splunk
 ---------------------------
 INFO  Fetching alerts from Splunk
 INFO  Scored 4 alerts
-INFO  Correlated 2 incidents
-INFO  Wrote incident af3c… to Splunk HEC
+INFO  Correlating incidents
+INFO  [DRY-RUN] Would write incident af3c89d1 to Splunk HEC
+INFO  [DRY-RUN] Would write incident b7e21a4f to Splunk HEC
+INFO  Pipeline completed
 ```
 
 ---
 
 ## 🔍 Detection Coverage
 
-| Alert | Platform | MITRE | Severity |
-|---|---|---|---|
-| Password Spraying | Windows / Linux | T1110.003 | HIGH |
-| SSH Brute Force | Linux | T1110.001 | LOW |
-| Kerberoasting | Windows | T1558.003 | CRITICAL |
-| Lateral Movement | Windows | T1021 | HIGH |
-| Lateral Movement (SSH) | Linux | T1021.004 | HIGH |
-| Privilege Escalation | Windows | T1068 | CRITICAL |
-| Privilege Escalation (sudo/SUID) | Linux | T1548.003 | CRITICAL |
-| Persistence | Windows | T1547 | CRITICAL |
-| Persistence (cron) | Linux | T1053.003 | CRITICAL |
-| Credential Dumping | Windows / Linux | T1003 | CRITICAL |
-| Ransomware Pre-Impact | Windows / Linux | T1490 | CRITICAL |
+11 detections across Windows and Linux, all mapped to MITRE ATT&CK:
 
-> [!NOTE] 
-> The raw Splunk SPL (Search Processing Language) logic behind these alerts is stored in [`splunk/detections/savedsearches.conf`](splunk/detections/savedsearches.conf).
+| Alert | Platform | MITRE | Severity |
+|---|---|---|:---:|
+| Password Spraying | Windows / Linux | T1110.003 | `HIGH` |
+| SSH Brute Force | Linux | T1110.001 | `LOW` |
+| Kerberoasting | Windows | T1558.003 | `CRITICAL` |
+| Lateral Movement (WMI/SMB) | Windows | T1021 | `HIGH` |
+| Lateral Movement (SSH fan-out) | Linux | T1021.004 | `HIGH` |
+| Privilege Escalation | Windows | T1068 | `CRITICAL` |
+| Privilege Escalation (sudo/SUID) | Linux | T1548.003 | `CRITICAL` |
+| Persistence (Registry/Task) | Windows | T1547 | `CRITICAL` |
+| Persistence (cron) | Linux | T1053.003 | `CRITICAL` |
+| Credential Dumping | Windows / Linux | T1003 | `CRITICAL` |
+| Ransomware Pre-Impact | Windows / Linux | T1490 | `CRITICAL` |
+
+> Raw SPL for all alerts lives in [`splunk/detections/savedsearches.conf`](splunk/detections/savedsearches.conf)
 
 ---
 
 ## 📊 Risk Scoring
 
+Each alert is scored across 4 factors, then incidents receive correlation bonuses:
+
 ```
 risk_score = normalize(
-    severity       × w_base_severity      +
-    host_criticality × w_host_criticality +
-    user_privilege × w_user_privilege     +
-    event_frequency × w_behavioral_frequency
+    severity         × w_base_severity       +
+    host_criticality × w_host_criticality    +
+    user_privilege   × w_user_privilege      +
+    event_frequency  × w_behavioral_frequency
 ) + correlation_bonus   →   capped at 100
 ```
 
-Weights are loaded from `config/weights.yaml`. Defaults:
+**Default weights** (`config/weights.yaml`):
 
-```yaml
-base_severity: 1.0
-host_criticality: 1.0
-user_privilege: 1.0
-behavioral_frequency: 1.0
-correlation_bonus: 15.0
-```
-
-### Correlation Bonus Stacking
-
-| Chain | Bonus |
+| Factor | Weight |
 |---|---|
-| Any Password Spraying | +0.5× bonus |
-| PS → Kerberoasting | +1× bonus |
-| Cred Access → Privilege Escalation | +1× bonus |
-| Priv-Esc → Persistence | +1× bonus |
-| Any Lateral Movement (Linux) | +1× bonus (amplified if cred access present) |
-| Any Credential Dumping | +1× bonus |
-| Pre-Ransomware after PE/Persistence/LM | +100 (capped to 100) |
+| Base Severity | 1.0 |
+| Host Criticality | 1.0 |
+| User Privilege | 1.0 |
+| Behavioral Frequency | 1.0 |
+| Correlation Bonus (base) | 15.0 |
+
+### Multi-Stage Correlation Bonuses
+
+| Attack Chain | Bonus |
+|---|---|
+| Any Password Spraying detected | +0.5× |
+| PS → Kerberoasting | +1× |
+| Credential Access → Privilege Escalation | +1× |
+| Priv-Esc → Persistence | +1× |
+| Linux Lateral Movement (SSH fan-out) | +1× (amplified if cred access present) |
+| Any Credential Dumping | +1× |
+| Pre-Ransomware after PE / Persistence / LM | **Capped at 100 (CRITICAL)** |
 
 ---
 
 ## 🧠 Explainability Output
 
-Every incident written to Splunk includes:
+Every incident written to Splunk contains a fully human-readable enriched JSON:
 
 ```json
 {
   "incident_id": "af3c89d1-...",
   "risk_score": 87.5,
-  "plain_english_summary": "A 3-alert chain on dc01...",
+  "plain_english_summary": "A 3-alert chain on dc01 indicates credential theft and privilege escalation...",
   "mitre_techniques": [
     {"technique_id": "T1110.003", "technique_name": "Brute Force: Password Spraying"},
-    {"technique_id": "T1558.003", "technique_name": "Steal or Forge Kerberos Tickets"}
+    {"technique_id": "T1558.003", "technique_name": "Steal or Forge Kerberos Tickets"},
+    {"technique_id": "T1068",     "technique_name": "Exploitation for Privilege Escalation"}
   ],
-  "risk_score_explanation": "Score elevated by correlation bonus of 30.0...",
+  "risk_score_explanation": "Score elevated by multi-stage chain correlation bonus of +30.0...",
   "investigation_steps": [
-    "Review failed authentication events for dc01...",
-    "Check for suspicious Kerberos ticket requests..."
+    "Review failed authentication events on dc01 for the time range...",
+    "Check for suspicious Kerberos ticket requests in Windows Security logs...",
+    "Investigate privilege escalation indicators on the affected host..."
   ]
 }
 ```
@@ -329,15 +241,15 @@ Every incident written to Splunk includes:
 
 ## 🩺 Signal Health Check
 
-Runs before every pipeline execution. Queries Splunk for latest event time across:
+Runs automatically before every pipeline execution. Queries Splunk for the freshness of:
 
-| Signal | Filter |
+| Signal | Splunk Filter |
 |---|---|
 | `linux_secure` | `sourcetype=linux_secure` |
 | `wineventlog:security` | `sourcetype=wineventlog:security` |
 | `alert:InsightOps*` | `source="alert:InsightOps*"` |
 
-Warns if any signal has no events in the last 10 minutes. Uses a 15s timeout per query. Fully fail-safe — never blocks the pipeline.
+Warns if any signal has no events in the last 10 minutes. Fully fail-safe — never blocks the pipeline even if Splunk is unreachable.
 
 ---
 
@@ -345,29 +257,111 @@ Warns if any signal has no events in the last 10 minutes. Uses a 15s timeout per
 
 ```bash
 pytest tests/ -v
+# 77 passed in 0.17s ✓
 ```
 
+All 77 tests run **offline** — no Splunk connection required.
+
+| Test File | What's Covered |
+|---|---|
+| `test_risk_scorer.py` | Scoring formula, caps, breakdown keys |
+| `test_bonus_engine.py` | All bonus rules, stacking, ransomware cap |
+| `test_incident_builder.py` | Alert grouping, time windows, schema |
+| `test_explainer.py` | MITRE classification, investigation steps |
+| `test_splunk_client.py` | All 11 alert classifiers, user/host field extraction |
+
+---
+
+## 📁 Project Structure
+
 ```
-77 passed in 0.17s
+InsightOps/
+├── web/
+│   ├── index.html          Landing page + live terminal UI
+│   ├── style.css           Dark glassmorphism design system
+│   ├── script.js           SSE client + pipeline visualizer + fallback sim
+│   └── server.py           Flask backend — SSE streaming + gallery routes
+│
+├── ai-engine/
+│   ├── main.py             Pipeline orchestrator (6-stage flow)
+│   ├── scoring/
+│   │   └── risk_scorer.py  4-factor weighted risk scoring (0–100)
+│   ├── correlation/
+│   │   ├── incident_builder.py   Alert → incident grouping
+│   │   └── bonus_engine.py       Multi-stage chain bonuses
+│   ├── explainability/
+│   │   └── explainer.py    MITRE mapping, summaries, investigation steps
+│   ├── health/
+│   │   └── signal_health.py      Telemetry freshness check
+│   └── ingestion/
+│       ├── splunk_client.py      Alert fetch + classification
+│       └── hec_writer.py         Write enriched incidents to Splunk HEC
+│
+├── tests/                  77 unit tests (pytest), fully offline
+├── config/
+│   ├── splunk.yaml         Connection config (no credentials)
+│   └── weights.yaml        Scoring weights
+├── splunk/
+│   └── detections/
+│       └── savedsearches.conf    Raw SPL for all 11 detections
+├── docs/
+│   ├── Images_Proof/       Live attack simulation screenshots
+│   ├── Lessons_Learned.md  15 lessons from building the project
+│   └── DASHBOARDS.md       Splunk dashboard XML definitions
+├── .env.example            Credential template
+├── requirements.txt
+└── pytest.ini
 ```
 
-No Splunk connection required. Tests cover:
-- `test_risk_scorer.py` — scoring formula, caps, breakdown keys
-- `test_bonus_engine.py` — all bonus rules, stacking, ransomware cap
-- `test_incident_builder.py` — grouping, time windows, schema
-- `test_explainer.py` — MITRE classification correctness, investigation steps
-- `test_splunk_client.py` — all 14 alert classifiers, user field extraction
+---
+
+## 📸 Screenshots
+
+### Multi-Stage Attack Correlation — Incident Triage Queue
+> AI-correlated incidents showing deterministic risk capping at 100 (CRITICAL) for multi-stage chains.
+
+![Triage Queue](docs/Images_Proof/Screenshot_20260228_223232.png)
+![Triage Queue Overview](docs/Images_Proof/Screenshot_20260228_223222.png)
+
+### Live Simulation: Kerberoasting vs SOC Overview
+> Attacker executing `GetUserSPNs.py` against Active Directory while the AI engine correlated alerts in real time.
+
+![Kerberoasting Attack](docs/Images_Proof/Screenshot_20260227_043645.png)
+
+### Live Simulation: SSH Password Spraying
+> Credential spraying against Ubuntu host; AI engine mapped behavior to T1110.003 and escalated risk score.
+
+![SSH Password Spraying](docs/Images_Proof/Screenshot_20260228_210806.png)
+
+---
+
+## 🌐 Lab Network Design
+
+| Component | IP |
+|---|---|
+| Fedora Host (Splunk + AI Engine) | `10.10.10.1` |
+| DC01 — Windows Server 2019 (AD) | `10.10.10.10` |
+| Ubuntu Domain Client | `10.10.10.20` |
+| Windows 10 Domain Client | `10.10.10.30` |
+| Kali Linux (Internal Attacker) | `10.10.10.50` |
+
+- Internal SOC LAN: `10.10.10.0/24`
+- NAT / Internet: `192.168.122.0/24`
+- Dual-NIC architecture for realistic east–west traffic simulation
 
 ---
 
 ## 🎓 Academic Context
 
-Built as a **6th-semester B.Tech (CSE – Cybersecurity)** Portfolio project. Demonstrates real SIEM integration, Windows + Linux kill-chain coverage, and production-grade SOC engineering practices well beyond typical academic scope.
+Built as a **6th-semester B.Tech (CSE — Cybersecurity)** portfolio project at a production SOC engineering level — real SIEM integration, Windows + Linux kill-chain coverage, and an explainability-first design philosophy that goes well beyond typical academic scope.
+
+**Target roles demonstrated:**
+SOC Analyst (Tier 1/2) · Blue Team Engineer · Detection Engineer · SIEM/SOC Automation Engineer · Entry-level DFIR
 
 ---
 
-## Final Note
+<div align="center">
 
-InsightOps is not a tool that "detects attacks."
+*InsightOps is not a tool that "detects attacks." It is a system that **protects analyst decision integrity.***
 
-It is a system that **protects analyst decision integrity**.
+</div>

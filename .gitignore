@@ -12,3 +12,9 @@ __pycache__/
 # Splunk config contains connection details; credentials must NOT be stored here,
 # but the file itself is excluded as an extra safety net.
 config/splunk.yaml
+
+# Runtime artifacts (logs, PID files from Flask/server runs)
+*.log
+*.pid
+flask_server.log
+web_server.log

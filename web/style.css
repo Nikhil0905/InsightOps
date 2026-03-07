@@ -658,6 +658,17 @@ img {
     box-shadow: 0 0 15px var(--green-glow);
 }
 
+.run-btn.run-download {
+    border-color: rgba(168, 85, 247, 0.3);
+    color: var(--purple);
+}
+
+.run-btn.run-download:hover {
+    background: rgba(168, 85, 247, 0.08);
+    border-color: rgba(168, 85, 247, 0.5);
+    box-shadow: 0 0 15px var(--purple-glow);
+}
+
 .run-btn.run-clear {
     border-color: rgba(255, 71, 87, 0.2);
     color: var(--text-muted);
@@ -978,10 +989,24 @@ img {
     min-width: 100px;
 }
 
-.pipeline-step:hover {
-    background: rgba(0, 212, 255, 0.1);
-    border-color: rgba(0, 212, 255, 0.2);
+.pipeline-step:hover,
+.pipeline-step.active {
     transform: translateY(-2px);
+    border-color: var(--accent);
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.05), rgba(0, 212, 255, 0.01));
+    box-shadow: 0 0 20px var(--accent-glow);
+}
+
+.pipeline-step:hover .step-num,
+.pipeline-step.active .step-num {
+    background: var(--accent);
+    color: var(--bg-primary);
+    box-shadow: 0 0 10px var(--accent-glow);
+}
+
+.pipeline-step:hover .step-name,
+.pipeline-step.active .step-name {
+    color: var(--text-primary);
 }
 
 .step-num {
@@ -1006,9 +1031,16 @@ img {
 }
 
 .pipeline-arrow {
-    color: var(--accent-dim);
+    color: var(--border-light);
     font-size: 1.2rem;
-    flex-shrink: 0;
+    font-weight: 300;
+    transition: all var(--transition);
+}
+
+.pipeline-arrow.active {
+    color: var(--accent);
+    text-shadow: 0 0 10px var(--accent-glow);
+    transform: scale(1.2);
 }
 
 /* --- Detection Section --- */
