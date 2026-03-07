@@ -14,6 +14,10 @@
 
 [🌐 Live Dashboard](#-interactive-web-dashboard) · [🚀 Quick Start](#-quick-start) · [🏗️ Architecture](#%EF%B8%8F-architecture) · [📖 Documentation](#-project-structure)
 
+<br/>
+
+![InsightOps — Live Dashboard Tour](docs/insightops_webpage_tour.webp)
+
 </div>
 
 ---
