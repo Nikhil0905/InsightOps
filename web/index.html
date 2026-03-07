@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InsightOps — AI-Driven SOC Intelligence</title>
+    <meta name="description"
+        content="InsightOps is an AI-assisted SOC intelligence engine that correlates security alerts, assigns deterministic risk scores, maps MITRE ATT&CK techniques, and generates analyst-ready incident narratives.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav id="navbar" class="navbar">
+        <div class="nav-container">
+            <a href="#hero" class="nav-logo">
+                <span class="logo-icon">⚡</span>
+                <span class="logo-text">Insight<span class="accent">Ops</span></span>
+            </a>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+                <span></span><span></span><span></span>
+            </button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#architecture">Architecture</a></li>
+                <li><a href="#detections">Detections</a></li>
+                <li><a href="#scoring">Scoring</a></li>
+                <li><a href="#gallery">Gallery</a></li>
+                <li><a href="#setup">Setup</a></li>
+                <li><a href="https://github.com/Nikhil0905/InsightOps" target="_blank" class="nav-btn">GitHub →</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero" class="hero">
+        <div class="hero-bg-grid"></div>
+        <div class="hero-particles" id="particles"></div>
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span class="badge-dot"></span>
+                SOC-Assist Intelligence Engine
+            </div>
+            <h1 class="hero-title">
+                <span class="title-line">Insight</span><span class="title-line accent-text">Ops</span>
+            </h1>
+            <p class="hero-subtitle">AI-Driven SOC Intelligence that <span class="typed-text"
+                    id="typedText"></span><span class="cursor-blink">|</span></p>
+            <p class="hero-desc">
+                Correlate security alerts. Assign deterministic risk scores. Map MITRE ATT&CK techniques. Generate
+                analyst-ready incident narratives — all without ML, black boxes, or automated response.
+            </p>
+            <div class="hero-actions">
+                <a href="#setup" class="btn btn-primary">
+                    <span class="btn-icon">🚀</span> Get Started
+                </a>
+                <a href="#features" class="btn btn-ghost">
+                    Explore Features <span class="btn-arrow">↓</span>
+                </a>
+            </div>
+            <div class="hero-stats">
+                <div class="stat">
+                    <span class="stat-value" data-count="11">0</span>
+                    <span class="stat-label">Detection Rules</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat">
+                    <span class="stat-value" data-count="77">0</span>
+                    <span class="stat-label">Unit Tests</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat">
+                    <span class="stat-value" data-count="6">0</span>
+                    <span class="stat-label">AI Modules</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat">
+                    <span class="stat-value">100%</span>
+                    <span class="stat-label">Explainable</span>
+                </div>
+            </div>
+        </div>
+        <div class="hero-terminal">
+            <div class="terminal-header">
+                <div class="terminal-dots">
+                    <span class="dot red"></span>
+                    <span class="dot yellow"></span>
+                    <span class="dot green"></span>
+                </div>
+                <span class="terminal-title" id="terminalTitle">insightops — dry-run</span>
+                <div class="terminal-controls">
+                    <span class="terminal-status" id="terminalStatus">
+                        <span class="status-dot idle"></span>
+                        <span class="status-text">Idle</span>
+                    </span>
+                </div>
+            </div>
+            <div class="terminal-actions" id="terminalActions">
+                <button class="run-btn run-pipeline" id="btnRunPipeline" onclick="runPipeline('dry-run')">
+                    <span class="run-icon">▶</span> Run Dry-Run
+                </button>
+                <button class="run-btn run-pipeline-full" id="btnRunFull" onclick="runPipeline('full')">
+                    <span class="run-icon">⚡</span> Run Full Pipeline
+                </button>
+                <button class="run-btn run-tests" id="btnRunTests" onclick="runTests()">
+                    <span class="run-icon">🧪</span> Run Tests
+                </button>
+                <button class="run-btn run-clear" id="btnClear" onclick="clearTerminal()">
+                    <span class="run-icon">✕</span> Clear
+                </button>
+            </div>
+            <div class="terminal-body" id="terminalBody">
+                <pre id="terminalOutput"></pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="section features">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">CAPABILITIES</span>
+                <h2 class="section-title">What Makes InsightOps <span class="accent-text">Different</span></h2>
+                <p class="section-desc">Not a SIEM. Not a SOAR. An intelligence layer that augments — never replaces —
+                    analyst judgment.</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card featured" data-aos="fade-up">
+                    <div class="feature-icon-wrap">
+                        <div class="feature-icon">🧠</div>
+                    </div>
+                    <h3>AI-Driven Correlation</h3>
+                    <p>Multi-stage attack chain detection with deterministic correlation bonuses. Password Spraying →
+                        Kerberoasting → Privilege Escalation chains are automatically identified and scored.</p>
+                    <div class="feature-tag">Core Engine</div>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="feature-icon-wrap">
+                        <div class="feature-icon">🎯</div>
+                    </div>
+                    <h3>MITRE ATT&CK Mapping</h3>
+                    <p>Every alert is automatically classified against the MITRE ATT&CK framework with technique IDs,
+                        tactic names, and detailed investigation steps.</p>
+                    <div class="feature-tag">Intel</div>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="feature-icon-wrap">
+                        <div class="feature-icon">📊</div>
+                    </div>
+                    <h3>4-Factor Risk Scoring</h3>
+                    <p>Deterministic scoring combining severity, host criticality, user privilege, and behavioral
+                        frequency — weighted and configurable via YAML.</p>
+                    <div class="feature-tag">Scoring</div>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="feature-icon-wrap">
+                        <div class="feature-icon">💬</div>
+                    </div>
+                    <h3>Explainable Intelligence</h3>
+                    <p>Every incident includes plain-English summaries, risk score breakdowns, and step-by-step
+                        investigation guidance. No black boxes.</p>
+                    <div class="feature-tag">Explainability</div>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="400">
+                    <div class="feature-icon-wrap">
+                        <div class="feature-icon">🩺</div>
+                    </div>
+                    <h3>Signal Health Monitoring</h3>
+                    <p>Pre-pipeline telemetry freshness checks detect silent log failures before they become blind
+                        spots. Fail-safe — never blocks the pipeline.</p>
+                    <div class="feature-tag">Health</div>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="500">
+                    <div class="feature-icon-wrap">
+                        <div class="feature-icon">🔒</div>
+                    </div>
+                    <h3>SOC-Assist Only</h3>
+                    <p>No automated response. No ML. No UI-driven mutations. InsightOps protects analyst decision
+                        integrity — it will never act on its own.</p>
+                    <div class="feature-tag">Philosophy</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Architecture Section -->
+    <section id="architecture" class="section architecture">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">SYSTEM DESIGN</span>
+                <h2 class="section-title">Three-Layer <span class="accent-text">Architecture</span></h2>
+                <p class="section-desc">From SOC infrastructure to AI intelligence — a production-grade pipeline.</p>
+            </div>
+            <div class="arch-flow">
+                <!-- Layer 1 -->
+                <div class="arch-layer" data-aos="fade-right">
+                    <div class="arch-layer-header">
+                        <span class="arch-layer-number">01</span>
+                        <h3>SOC Infrastructure</h3>
+                    </div>
+                    <div class="arch-layer-content">
+                        <div class="arch-node">
+                            <span class="node-icon">🖥️</span>
+                            <div>
+                                <strong>Fedora Host</strong>
+                                <span>Splunk Enterprise</span>
+                            </div>
+                        </div>
+                        <div class="arch-node">
+                            <span class="node-icon">🏢</span>
+                            <div>
+                                <strong>DC01</strong>
+                                <span>Windows Server 2019 AD</span>
+                            </div>
+                        </div>
+                        <div class="arch-node">
+                            <span class="node-icon">💻</span>
+                            <div>
+                                <strong>Win10 + Ubuntu</strong>
+                                <span>Domain-joined Endpoints</span>
+                            </div>
+                        </div>
+                        <div class="arch-node attacker">
+                            <span class="node-icon">☠️</span>
+                            <div>
+                                <strong>Kali Linux</strong>
+                                <span>Internal Attacker</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="arch-connector">
+                    <div class="connector-line"></div>
+                    <div class="connector-label">REST API :8089</div>
+                    <div class="connector-pulse"></div>
+                </div>
+
+                <!-- Layer 2 -->
+                <div class="arch-layer highlight" data-aos="fade-up">
+                    <div class="arch-layer-header">
+                        <span class="arch-layer-number">02</span>
+                        <h3>AI Intelligence Engine</h3>
+                        <span class="arch-badge">Core</span>
+                    </div>
+                    <div class="arch-pipeline">
+                        <div class="pipeline-step">
+                            <span class="step-num">0</span>
+                            <span class="step-name">Health Check</span>
+                            <span class="step-file">signal_health.py</span>
+                        </div>
+                        <div class="pipeline-arrow">→</div>
+                        <div class="pipeline-step">
+                            <span class="step-num">1</span>
+                            <span class="step-name">Fetch Alerts</span>
+                            <span class="step-file">splunk_client.py</span>
+                        </div>
+                        <div class="pipeline-arrow">→</div>
+                        <div class="pipeline-step">
+                            <span class="step-num">2</span>
+                            <span class="step-name">Risk Score</span>
+                            <span class="step-file">risk_scorer.py</span>
+                        </div>
+                        <div class="pipeline-arrow">→</div>
+                        <div class="pipeline-step">
+                            <span class="step-num">3</span>
+                            <span class="step-name">Correlate</span>
+                            <span class="step-file">incident_builder.py</span>
+                        </div>
+                        <div class="pipeline-arrow">→</div>
+                        <div class="pipeline-step">
+                            <span class="step-num">4</span>
+                            <span class="step-name">Bonus Engine</span>
+                            <span class="step-file">bonus_engine.py</span>
+                        </div>
+                        <div class="pipeline-arrow">→</div>
+                        <div class="pipeline-step">
+                            <span class="step-num">5</span>
+                            <span class="step-name">Explain</span>
+                            <span class="step-file">explainer.py</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="arch-connector">
+                    <div class="connector-line"></div>
+                    <div class="connector-label">HEC :8088</div>
+                    <div class="connector-pulse"></div>
+                </div>
+
+                <!-- Layer 3 -->
+                <div class="arch-layer" data-aos="fade-left">
+                    <div class="arch-layer-header">
+                        <span class="arch-layer-number">03</span>
+                        <h3>Enriched Intelligence</h3>
+                    </div>
+                    <div class="arch-layer-content output">
+                        <div class="arch-node">
+                            <span class="node-icon">📋</span>
+                            <div>
+                                <strong>Splunk (ai_soc)</strong>
+                                <span>Enriched Incidents</span>
+                            </div>
+                        </div>
+                        <div class="arch-node">
+                            <span class="node-icon">📊</span>
+                            <div>
+                                <strong>SOC Dashboard</strong>
+                                <span>Triage Queue + Overview</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Detection Coverage Section -->
+    <section id="detections" class="section detections">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">COVERAGE</span>
+                <h2 class="section-title">Detection <span class="accent-text">Arsenal</span></h2>
+                <p class="section-desc">11 detection rules across Windows and Linux, mapped to MITRE ATT&CK.</p>
+            </div>
+            <div class="detection-filters">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="windows">Windows</button>
+                <button class="filter-btn" data-filter="linux">Linux</button>
+                <button class="filter-btn" data-filter="critical">Critical</button>
+            </div>
+            <div class="detection-grid" id="detectionGrid">
+                <!-- Detection cards injected by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Risk Scoring Section -->
+    <section id="scoring" class="section scoring">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">INTELLIGENCE</span>
+                <h2 class="section-title">Risk Scoring <span class="accent-text">Formula</span></h2>
+                <p class="section-desc">Fully deterministic. Fully explainable. No black boxes.</p>
+            </div>
+            <div class="scoring-layout">
+                <div class="scoring-formula" data-aos="fade-right">
+                    <div class="formula-card">
+                        <h3>Base Score Calculation</h3>
+                        <div class="formula-code">
+                            <code>
+risk_score = normalize(
+    severity       × <span class="f-weight">w₁</span> +
+    host_crit      × <span class="f-weight">w₂</span> +
+    user_priv      × <span class="f-weight">w₃</span> +
+    event_freq     × <span class="f-weight">w₄</span>
+) + <span class="f-bonus">correlation_bonus</span>
+
+→ capped at <span class="f-cap">100</span>
+                            </code>
+                        </div>
+                    </div>
+                    <div class="formula-weights">
+                        <h4>Default Weights <span class="mono">(config/weights.yaml)</span></h4>
+                        <div class="weight-bars">
+                            <div class="weight-item">
+                                <span class="weight-label">Base Severity</span>
+                                <div class="weight-bar">
+                                    <div class="weight-fill" data-width="100"></div>
+                                </div>
+                                <span class="weight-value">1.0</span>
+                            </div>
+                            <div class="weight-item">
+                                <span class="weight-label">Host Criticality</span>
+                                <div class="weight-bar">
+                                    <div class="weight-fill" data-width="100"></div>
+                                </div>
+                                <span class="weight-value">1.0</span>
+                            </div>
+                            <div class="weight-item">
+                                <span class="weight-label">User Privilege</span>
+                                <div class="weight-bar">
+                                    <div class="weight-fill" data-width="100"></div>
+                                </div>
+                                <span class="weight-value">1.0</span>
+                            </div>
+                            <div class="weight-item">
+                                <span class="weight-label">Behavioral Freq</span>
+                                <div class="weight-bar">
+                                    <div class="weight-fill" data-width="100"></div>
+                                </div>
+                                <span class="weight-value">1.0</span>
+                            </div>
+                            <div class="weight-item highlight">
+                                <span class="weight-label">Correlation Bonus</span>
+                                <div class="weight-bar">
+                                    <div class="weight-fill bonus" data-width="100"></div>
+                                </div>
+                                <span class="weight-value">15.0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="scoring-bonuses" data-aos="fade-left">
+                    <h3>Correlation Bonus Stacking</h3>
+                    <div class="bonus-chain">
+                        <div class="bonus-item">
+                            <div class="bonus-header">
+                                <span class="bonus-chain-label">Password Spraying</span>
+                                <span class="bonus-value">+0.5×</span>
+                            </div>
+                            <div class="bonus-bar">
+                                <div class="bonus-fill" style="width: 25%"></div>
+                            </div>
+                        </div>
+                        <div class="bonus-item">
+                            <div class="bonus-header">
+                                <span class="bonus-chain-label">PS → Kerberoasting</span>
+                                <span class="bonus-value">+1×</span>
+                            </div>
+                            <div class="bonus-bar">
+                                <div class="bonus-fill" style="width: 40%"></div>
+                            </div>
+                        </div>
+                        <div class="bonus-item">
+                            <div class="bonus-header">
+                                <span class="bonus-chain-label">Cred Access → Priv Esc</span>
+                                <span class="bonus-value">+1×</span>
+                            </div>
+                            <div class="bonus-bar">
+                                <div class="bonus-fill" style="width: 40%"></div>
+                            </div>
+                        </div>
+                        <div class="bonus-item">
+                            <div class="bonus-header">
+                                <span class="bonus-chain-label">Priv Esc → Persistence</span>
+                                <span class="bonus-value">+1×</span>
+                            </div>
+                            <div class="bonus-bar">
+                                <div class="bonus-fill" style="width: 40%"></div>
+                            </div>
+                        </div>
+                        <div class="bonus-item">
+                            <div class="bonus-header">
+                                <span class="bonus-chain-label">Lateral Movement (Linux)</span>
+                                <span class="bonus-value">+1×</span>
+                            </div>
+                            <div class="bonus-bar">
+                                <div class="bonus-fill" style="width: 40%"></div>
+                            </div>
+                        </div>
+                        <div class="bonus-item">
+                            <div class="bonus-header">
+                                <span class="bonus-chain-label">Credential Dumping</span>
+                                <span class="bonus-value">+1×</span>
+                            </div>
+                            <div class="bonus-bar">
+                                <div class="bonus-fill" style="width: 40%"></div>
+                            </div>
+                        </div>
+                        <div class="bonus-item critical">
+                            <div class="bonus-header">
+                                <span class="bonus-chain-label">🔴 Pre-Ransomware Chain</span>
+                                <span class="bonus-value">→ 100</span>
+                            </div>
+                            <div class="bonus-bar">
+                                <div class="bonus-fill ransomware" style="width: 100%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Explainability Section -->
+    <section id="explainability" class="section explainability">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">OUTPUT</span>
+                <h2 class="section-title">Explainable <span class="accent-text">Intelligence</span></h2>
+                <p class="section-desc">Every incident written to Splunk includes full context for the analyst.</p>
+            </div>
+            <div class="explain-demo">
+                <div class="explain-card" data-aos="zoom-in">
+                    <div class="explain-header">
+                        <div class="explain-meta">
+                            <span class="explain-id">incident_id: af3c89d1-...</span>
+                            <span class="explain-risk critical">RISK: 87.5</span>
+                        </div>
+                    </div>
+                    <div class="explain-body">
+                        <div class="explain-field">
+                            <span class="field-label">📝 Summary</span>
+                            <p class="field-value summary">"A 3-alert chain on dc01 involving Password Spraying
+                                (T1110.003), Kerberoasting (T1558.003), and Privilege Escalation (T1068). Risk elevated
+                                by correlation bonus of 30.0 due to multi-stage credential compromise pattern."</p>
+                        </div>
+                        <div class="explain-field">
+                            <span class="field-label">🎯 MITRE Techniques</span>
+                            <div class="mitre-tags">
+                                <span class="mitre-tag">T1110.003 <small>Password Spraying</small></span>
+                                <span class="mitre-tag">T1558.003 <small>Kerberoasting</small></span>
+                                <span class="mitre-tag">T1068 <small>Privilege Escalation</small></span>
+                            </div>
+                        </div>
+                        <div class="explain-field">
+                            <span class="field-label">🔍 Investigation Steps</span>
+                            <ol class="investigation-steps">
+                                <li>Review failed authentication events for dc01 in the last 24h</li>
+                                <li>Check for suspicious Kerberos ticket requests from the source IP</li>
+                                <li>Verify if any new services or scheduled tasks were created post-escalation</li>
+                                <li>Cross-reference with endpoint detection logs for lateral movement indicators</li>
+                            </ol>
+                        </div>
+                        <div class="explain-field">
+                            <span class="field-label">📊 Score Breakdown</span>
+                            <div class="score-breakdown">
+                                <div class="breakdown-item">
+                                    <span>Base Score</span>
+                                    <div class="breakdown-bar">
+                                        <div class="breakdown-fill" style="width: 57.5%"></div>
+                                    </div>
+                                    <span>57.5</span>
+                                </div>
+                                <div class="breakdown-item bonus-row">
+                                    <span>Correlation</span>
+                                    <div class="breakdown-bar">
+                                        <div class="breakdown-fill bonus" style="width: 30%"></div>
+                                    </div>
+                                    <span>+30.0</span>
+                                </div>
+                                <div class="breakdown-item total-row">
+                                    <span>Total</span>
+                                    <div class="breakdown-bar">
+                                        <div class="breakdown-fill total" style="width: 87.5%"></div>
+                                    </div>
+                                    <span>87.5</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="gallery" class="section gallery">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">IN ACTION</span>
+                <h2 class="section-title">Execution <span class="accent-text">Gallery</span></h2>
+                <p class="section-desc">Live attack simulations with Kali Linux + Splunk side-by-side.</p>
+            </div>
+            <div class="gallery-grid">
+                <div class="gallery-item large" data-aos="fade-up">
+                    <img src="gallery/Screenshot_20260228_223232.png" alt="Incident Triage Queue" loading="lazy">
+                    <div class="gallery-overlay">
+                        <h4>Multi-Stage Attack Correlation</h4>
+                        <p>AI-correlated incidents with deterministic risk capping at 100 (CRITICAL)</p>
+                    </div>
+                </div>
+                <div class="gallery-item" data-aos="fade-up" data-aos-delay="100">
+                    <img src="gallery/Screenshot_20260227_043645.png" alt="Kerberoasting Attack" loading="lazy">
+                    <div class="gallery-overlay">
+                        <h4>Kerberoasting Attack</h4>
+                        <p>GetUserSPNs.py execution with real-time SOC awareness</p>
+                    </div>
+                </div>
+                <div class="gallery-item" data-aos="fade-up" data-aos-delay="200">
+                    <img src="gallery/Screenshot_20260228_223222.png" alt="SSH Password Spraying" loading="lazy">
+                    <div class="gallery-overlay">
+                        <h4>SSH Password Spraying</h4>
+                        <p>Mapped to MITRE T1110.003 with auto risk escalation</p>
+                    </div>
+                </div>
+                <div class="gallery-item large" data-aos="fade-up" data-aos-delay="300">
+                    <img src="gallery/Screenshot_20260227_052227.png" alt="Detection Dashboard" loading="lazy">
+                    <div class="gallery-overlay">
+                        <h4>SOC Dashboard</h4>
+                        <p>Real-time situational awareness overview</p>
+                    </div>
+                </div>
+                <div class="gallery-item" data-aos="fade-up" data-aos-delay="400">
+                    <img src="gallery/Screenshot_20260227_065718.png" alt="Alert Pipeline" loading="lazy">
+                    <div class="gallery-overlay">
+                        <h4>Alert Pipeline</h4>
+                        <p>AI engine processing alerts in real-time</p>
+                    </div>
+                </div>
+                <div class="gallery-item large" data-aos="fade-up" data-aos-delay="500">
+                    <img src="gallery/Screenshot_20260227_072132.png" alt="Full Lab View" loading="lazy">
+                    <div class="gallery-overlay">
+                        <h4>Full SOC Lab View</h4>
+                        <p>Complete Active Directory SOC lab with attack simulation</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- What InsightOps Does NOT Do -->
+    <section class="section philosophy">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">PHILOSOPHY</span>
+                <h2 class="section-title">By <span class="accent-text">Design</span></h2>
+                <p class="section-desc">These aren't missing features. They're conscious exclusions to protect analyst
+                    trust.</p>
+            </div>
+            <div class="philosophy-grid">
+                <div class="philosophy-card no" data-aos="fade-up">
+                    <span class="phi-icon">🚫</span>
+                    <h4>Automated Response</h4>
+                    <p>Never acts on its own. Never blocks, quarantines, or remediates.</p>
+                    <span class="phi-status">Never</span>
+                </div>
+                <div class="philosophy-card no" data-aos="fade-up" data-aos-delay="100">
+                    <span class="phi-icon">🚫</span>
+                    <h4>ML / Probabilistic Scoring</h4>
+                    <p>Every score is deterministic and fully reproducible.</p>
+                    <span class="phi-status">Never</span>
+                </div>
+                <div class="philosophy-card no" data-aos="fade-up" data-aos-delay="200">
+                    <span class="phi-icon">🚫</span>
+                    <h4>UI State Mutation</h4>
+                    <p>No UI can modify incident data or risk scores.</p>
+                    <span class="phi-status">Never</span>
+                </div>
+                <div class="philosophy-card no" data-aos="fade-up" data-aos-delay="300">
+                    <span class="phi-icon">🚫</span>
+                    <h4>SOAR Actions</h4>
+                    <p>Intelligence only. No orchestration, no playbooks.</p>
+                    <span class="phi-status">Never</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Setup Section -->
+    <section id="setup" class="section setup">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">GET STARTED</span>
+                <h2 class="section-title">Quick <span class="accent-text">Setup</span></h2>
+                <p class="section-desc">Get InsightOps running in under 5 minutes.</p>
+            </div>
+            <div class="setup-steps">
+                <div class="setup-step" data-aos="fade-up">
+                    <div class="step-number">01</div>
+                    <div class="step-content">
+                        <h3>Install Dependencies</h3>
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>bash</span>
+                                <button class="copy-btn" data-copy="pip install -r requirements.txt">Copy</button>
+                            </div>
+                            <pre><code>pip install -r requirements.txt</code></pre>
+                        </div>
+                    </div>
+                </div>
+                <div class="setup-step" data-aos="fade-up" data-aos-delay="100">
+                    <div class="step-number">02</div>
+                    <div class="step-content">
+                        <h3>Configure Credentials</h3>
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>bash</span>
+                                <button class="copy-btn"
+                                    data-copy="cp .env.example .env&#10;# Edit .env and fill in your values:&#10;#   SPLUNK_USERNAME=...&#10;#   SPLUNK_PASSWORD=...&#10;#   SPLUNK_HEC_TOKEN=...&#10;source .env">Copy</button>
+                            </div>
+                            <pre><code>cp .env.example .env
+# Edit .env with your values:
+#   SPLUNK_USERNAME=...
+#   SPLUNK_PASSWORD=...
+#   SPLUNK_HEC_TOKEN=...
+source .env</code></pre>
+                        </div>
+                    </div>
+                </div>
+                <div class="setup-step" data-aos="fade-up" data-aos-delay="200">
+                    <div class="step-number">03</div>
+                    <div class="step-content">
+                        <h3>Configure Connection</h3>
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>yaml — config/splunk.yaml</span>
+                                <button class="copy-btn"
+                                    data-copy="splunk_host: 10.10.10.1&#10;management_port: 8089&#10;hec_port: 8088&#10;ai_soc_index: ai_soc">Copy</button>
+                            </div>
+                            <pre><code>splunk_host: 10.10.10.1
+management_port: 8089
+hec_port: 8088
+ai_soc_index: ai_soc</code></pre>
+                        </div>
+                    </div>
+                </div>
+                <div class="setup-step" data-aos="fade-up" data-aos-delay="300">
+                    <div class="step-number">04</div>
+                    <div class="step-content">
+                        <h3>Run InsightOps</h3>
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>bash</span>
+                                <button class="copy-btn"
+                                    data-copy="# Dry-run (no writes to Splunk)&#10;python ai-engine/main.py --dry-run&#10;&#10;# Full pipeline&#10;python ai-engine/main.py">Copy</button>
+                            </div>
+                            <pre><code># Dry-run (no writes to Splunk)
+python ai-engine/main.py --dry-run
+
+# Full pipeline
+python ai-engine/main.py</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="setup-tests" data-aos="fade-up">
+                <div class="test-card">
+                    <div class="test-header">
+                        <span class="test-icon">🧪</span>
+                        <h3>Run Tests</h3>
+                        <span class="test-count">77 tests</span>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>bash</span>
+                            <button class="copy-btn" data-copy="pytest tests/ -v">Copy</button>
+                        </div>
+                        <pre><code>pytest tests/ -v
+# 77 passed in 0.17s — no Splunk required</code></pre>
+                    </div>
+                    <div class="test-modules">
+                        <span class="test-tag">risk_scorer</span>
+                        <span class="test-tag">bonus_engine</span>
+                        <span class="test-tag">incident_builder</span>
+                        <span class="test-tag">explainer</span>
+                        <span class="test-tag">splunk_client</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <span class="logo-icon">⚡</span>
+                    <span class="logo-text">Insight<span class="accent">Ops</span></span>
+                    <p class="footer-tagline">Protects analyst decision integrity.</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-col">
+                        <h4>Project</h4>
+                        <a href="#features">Features</a>
+                        <a href="#architecture">Architecture</a>
+                        <a href="#detections">Detections</a>
+                        <a href="#scoring">Scoring</a>
+                    </div>
+                    <div class="footer-col">
+                        <h4>Resources</h4>
+                        <a href="#setup">Quick Setup</a>
+                        <a href="#gallery">Gallery</a>
+                        <a href="https://github.com/Nikhil0905/InsightOps" target="_blank">GitHub</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>Built as a <strong>6th-semester B.Tech (CSE – Cybersecurity)</strong> Portfolio Project</p>
+                <p class="footer-quote">"InsightOps is not a tool that detects attacks. It is a system that protects
+                    analyst decision integrity."</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
