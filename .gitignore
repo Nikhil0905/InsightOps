@@ -1,6 +1,6 @@
 # Secrets — never commit these
 .env
-
+.vscode
 # Virtual environment
 /.venv/
 
